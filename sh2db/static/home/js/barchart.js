@@ -97,26 +97,41 @@ function barchart(url_mask, width, height){
             .attr("fill", d => d.originalColor)
             .attr("class", "bar-rect")
             .on("mouseover", function(event, d) {
-                // Highlight with pure red
+                // Store the current color before changing
+                const currentColor = d3.select(this).attr("fill");
+                
+                // Highlight with plain red
                 d3.select(this)
                     .transition()
                     .duration(200)
-                    .attr("fill", "#FF0000");  // Pure red
+                    .attr("fill", "#FF0000");  // Plain red
+                
+                // Store the original color on the element for mouseout
+                d3.select(this).attr("data-original-color", currentColor);
                 
                 // Show tooltip with just the value
                 tooltip.transition()
                     .duration(200)
                     .style("opacity", .9);
+                
+                // Get the SVG container
+                const svgContainer = d3.select("#grouped_bars svg");
+                
+                // Get the mouse position relative to the SVG
+                const [mouseX, mouseY] = d3.pointer(event, svgContainer.node());
+                
                 tooltip.html(`${d.value}`)
-                    .style("left", (event.pageX) + "px")
-                    .style("top", (event.pageY - 10) + "px");
+                    .style("left", `${mouseX + 10}px`)
+                    .style("top", `${mouseY - 10}px`);
             })
             .on("mouseout", function(d) {
-                // Restore original color
+                // Restore original color using the stored attribute
+                const originalColor = d3.select(this).attr("data-original-color");
+                
                 d3.select(this)
                     .transition()
                     .duration(200)
-                    .attr("fill", d.originalColor);
+                    .attr("fill", originalColor);
                 
                 // Hide tooltip
                 tooltip.transition()

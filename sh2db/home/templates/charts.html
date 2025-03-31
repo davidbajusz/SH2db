@@ -7,11 +7,11 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12" id="chartArea">
-      <div class="row mb-3">
+      <div class="row mb-4">
         <div class="col-md-6">
           <div class="form-group">
-            <label for="select_x" class="form-label">X axis:</label>
-            <select name="select_x" id="select_x" class="form-select form-select-lg">
+            <label for="select_x" class="form-label fw-bold text-secondary">X axis</label>
+            <select name="select_x" id="select_x" class="form-select form-select-lg custom-select">
               <option value="family" selected>Functional category</option>
               <option value="year">Year</option>
               <option value="species">Species</option>
@@ -21,8 +21,8 @@
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <label for="select_y" class="form-label">Y axis:</label>
-            <select name="select_y" id="select_y" class="form-select form-select-lg">
+            <label for="select_y" class="form-label fw-bold text-secondary">Y axis</label>
+            <select name="select_y" id="select_y" class="form-select form-select-lg custom-select">
               <option value="protein" selected>Proteins</option>
               <option value="structure">PDB entries</option>
               <option value="structuredomain">SH2 domain structures</option>
@@ -48,6 +48,33 @@
 <script src="{% static 'home/js/barchart.js' %}"></script>
 
 <style>
+  /* Modern, sleek dropdown styling */
+  .custom-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    color: #495057;
+    transition: all 0.3s ease;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M1 4l5 5 5-5' fill='none' stroke='%23495057' stroke-width='2'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+  }
+
+  .custom-select:focus {
+    outline: none;
+    border-color: #6c757d;
+    box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
+  }
+
+  .custom-select:hover {
+    background-color: #e9ecef;
+  }
+
   /* Tooltip styling */
   .tooltip {
     position: absolute;
