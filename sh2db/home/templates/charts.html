@@ -11,7 +11,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <label for="select_x" class="form-label">X axis:</label>
-            <select name="select_x" id="select_x" class="form-select form-select-lg">
+            <select name="select_x" id="select_x" class="form-select form-select-lg btn-outline-danger">
               <option value="family" selected>Functional category</option>
               <option value="year">Year</option>
               <option value="species">Species</option>
@@ -22,7 +22,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <label for="select_y" class="form-label">Y axis:</label>
-            <select name="select_y" id="select_y" class="form-select form-select-lg">
+            <select name="select_y" id="select_y" class="form-select form-select-lg btn-outline-danger">
               <option value="protein" selected>Proteins</option>
               <option value="structure">PDB entries</option>
               <option value="structuredomain">SH2 domain structures</option>
@@ -47,15 +47,34 @@
 <script src="{% static 'home/js/d3.v7.js' %}"></script>
 <script src="{% static 'home/js/barchart.js' %}"></script>
 
+<style>
+  /* Hover effect for dropdowns */
+  .form-select.btn-outline-danger:hover {
+    background-color: #f8d7da;
+    border-color: #dc3545;
+    color: #dc3545;
+  }
+
+  /* Tooltip styling */
+  .tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    pointer-events: none;
+    font-size: 12px;
+    z-index: 1000;
+  }
+</style>
+
 <script>
     // set the dimensions and margins of the graph
-
     const margin = {top: 10, right: 30, bottom: 20, left: 50},
         width = document.getElementById('chartArea').clientWidth - margin.left - margin.right,
         height = width / 2.0;
 
     $(window).bind('load resize', function() {
-
       const margin = {top: 10, right: 30, bottom: 20, left: 50},
         width = document.getElementById('chartArea').clientWidth - margin.left - margin.right,
         height = width / 2.0;
@@ -64,7 +83,6 @@
       const url_mask = "{% url 'get_csv' 123 456 %}".replace(/123/, select_x.toString() )
                                                      .replace(/456/, select_y.toString() );
       barchart(url_mask, width, height);
-    
     });
     
     $('#select_x').change( function() {
@@ -82,6 +100,5 @@
                                                      .replace(/456/, select_y.toString() );
       barchart(url_mask, width, height);
     });      
-
 </script>
 {% endblock %}

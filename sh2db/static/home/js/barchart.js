@@ -13,6 +13,18 @@ function barchart(url_mask, width, height){
     .append("g")
         .attr("transform",`translate(${margin.left},${margin.top})`);
         
+    // Create tooltip div
+    const tooltip = d3.select("#grouped_bars")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0)
+        .style("position", "absolute")
+        .style("background-color", "rgba(0, 0, 0, 0.7)")
+        .style("color", "white")
+        .style("padding", "5px")
+        .style("border-radius", "5px")
+        .style("pointer-events", "none");
+        
     // Parse the Data 
     d3.csv( url_mask ).then( function(data) {
     
@@ -76,13 +88,41 @@ function barchart(url_mask, width, height){
         .join("g")
             .attr("transform", d => `translate(${x(d.group)}, 0)`)
         .selectAll("rect")
-        .data(function(d) { return subgroups.map(function(key) { return {key: key, value: d[key]}; }); })
+        .data(function(d) { return subgroups.map(function(key) { return {key: key, value: d[key], group: d.group}; }); })
         .join("rect")
             .attr("x", d => xSubgroup(d.key))
             .attr("y", innerHeight) // Start bars from bottom
             .attr("width", xSubgroup.bandwidth())
             .attr("height", 0) // Initial height is 0
-            .attr("fill", d => color(d.key));
+            .attr("fill", d => color(d.key))
+            .attr("class", "bar-rect")
+            .on("mouseover", function(event, d) {
+                // Darken the bar on hover
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr("fill", d3.color(color(d.key)).darker(0.7));
+                
+                // Show tooltip
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                tooltip.html(`Group: ${d.group}<br/>Category: ${d.key}<br/>Value: ${d.value}`)
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", function(d) {
+                // Restore original color
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr("fill", color(d.key));
+                
+                // Hide tooltip
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
 
     // Animate bars growing from bottom to their actual height
     rects
