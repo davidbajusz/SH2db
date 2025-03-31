@@ -7,28 +7,33 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12" id="chartArea">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="select_x" class="form-label">X axis:</label>
+            <select name="select_x" id="select_x" class="form-select form-select-lg">
+              <option value="family" selected>Functional category</option>
+              <option value="year">Year</option>
+              <option value="species">Species</option>
+              <option value="no_sh2">No. of SH2 domains in entry</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="select_y" class="form-label">Y axis:</label>
+            <select name="select_y" id="select_y" class="form-select form-select-lg">
+              <option value="protein" selected>Proteins</option>
+              <option value="structure">PDB entries</option>
+              <option value="structuredomain">SH2 domain structures</option>
+              <option value="publication">Publications</option>
+            </select>
+          </div>
+        </div>
+      </div>
 
-
-      <label for="select_x">X axis:</label>
-      <select name="select_x" id="select_x">
-        <option value="family" selected>Functional category</option>
-        <option value="year">Year</option>
-        <option value="species">Species</option>
-        <option value="no_sh2">No. of SH2 domains in entry</option>
-      </select>
-
-      <label for="select_y">Y axis:</label>
-      <select name="select_y" id="select_y">
-        <option value="protein" selected>Proteins</option>
-        <option value="structure">PDB entries</option>
-        <option value="structuredomain">SH2 domain structures</option>
-        <option value="publication">Publications</option>
-      </select>
-
-      <div id="grouped_bars"></div>
-
+      <div id="grouped_bars" class="mt-4"></div>
     </div>
-
   </div>
 </div>
 {% endblock %}
@@ -57,10 +62,8 @@
       const select_x = $('#select_x').val();
       const select_y = $('#select_y').val();
       const url_mask = "{% url 'get_csv' 123 456 %}".replace(/123/, select_x.toString() )
-                                                    .replace(/456/, select_y.toString() );
+                                                     .replace(/456/, select_y.toString() );
       barchart(url_mask, width, height);
-
-      //$('#proba').html( $('#select_x').val() + $('#select_y').val() + document.getElementById('chartArea').clientWidth + url_mask); <p id="proba"></p>
     
     });
     
@@ -68,29 +71,17 @@
       const select_x = $('#select_x').val();
       const select_y = $('#select_y').val();
       const url_mask = "{% url 'get_csv' 123 456 %}".replace(/123/, select_x.toString() )
-                                                    .replace(/456/, select_y.toString() );
+                                                     .replace(/456/, select_y.toString() );
       barchart(url_mask, width, height);
-
-      //$('#proba').html( $('#select_x').val() + $('#select_y').val() + document.getElementById('chartArea').clientWidth + url_mask);
-    
     });
 
     $('#select_y').change( function() {
-
-      //if ( ( $("#select_x").val()==="no_sh2" & $("#select_x").val()==="structuredomain" ) ||
-      //  ( $("#select_x").val()==="no_sh2" & $("#select_x").val()==="publication" ) ){
-      //      showAlert("Chart not available", "danger");
-      //  }
-
       const select_x = $('#select_x').val();
       const select_y = $('#select_y').val();
       const url_mask = "{% url 'get_csv' 123 456 %}".replace(/123/, select_x.toString() )
-                                                    .replace(/456/, select_y.toString() );
+                                                     .replace(/456/, select_y.toString() );
       barchart(url_mask, width, height);
-
-      //$('#proba').html( $('#select_x').val() + $('#select_y').val() + document.getElementById('chartArea').clientWidth + url_mask);
-    
     });      
 
-    </script>
+</script>
 {% endblock %}

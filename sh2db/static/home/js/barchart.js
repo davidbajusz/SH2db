@@ -37,7 +37,7 @@ function barchart(url_mask, width, height){
             .attr("dx", "-.8em")
             .attr("dy", ".15em")
             .attr("transform", "rotate(-45)")
-            .style("font-size", "12px");
+            .style("font-size", "16px");
 
     // Add Y axis label
     svg.append("text")
@@ -47,7 +47,7 @@ function barchart(url_mask, width, height){
         .attr("dy", "1em")
         .style("text-anchor", "middle")
         .text("Count")
-        .style("font-size", "14px");
+        .style("font-size", "18px");
 
     // Add Y axis
     const y = d3.scaleLinear()
@@ -56,7 +56,7 @@ function barchart(url_mask, width, height){
     svg.append("g")
         .call(d3.axisLeft(y).ticks(10))
         .selectAll("text")
-            .style("font-size", "12px");
+            .style("font-size", "16px");
 
     // Another scale for subgroup position
     const xSubgroup = d3.scaleBand()
@@ -64,10 +64,10 @@ function barchart(url_mask, width, height){
         .range([0, x.bandwidth()])
         .padding([0.05])
 
-    // color palette = one color per subgroup
+    // Pastel color palette = one color per subgroup
     const color = d3.scaleOrdinal()
         .domain(subgroups)
-        .range(['#e41a1c','#377eb8','#4daf4a'])
+        .range(['#FFB3BA', '#BAFFC9', '#BAE1FF'])  // Pastel pink, green, blue
 
     // Show the bars with animation
     const rects = svg.append("g")
