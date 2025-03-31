@@ -1,6 +1,10 @@
 function barchart(url_mask, width, height){
+    // Set margins to provide more space for labels
+    const margin = {top: 40, right: 40, bottom: 60, left: 60};
+    const innerWidth = width - margin.left - margin.right;
+    const innerHeight = height - margin.top - margin.bottom;
     
-    // append the svg object to the body of the page
+    // Remove existing SVG and create a new one with more space
     d3.select("svg").remove();
     const svg = d3.select("#grouped_bars")
     .append("svg")
@@ -20,61 +24,72 @@ function barchart(url_mask, width, height){
 
     const max_y = d3.max(data.map(d => parseInt(d.count) ) )
 
-    console.log(groups)
-
-    // Add X axis
+    // Add X axis with rotated labels and increased text size
     const x = d3.scaleBand()
         .domain(groups)
-        .range([0, width])
+        .range([0, innerWidth])
         .padding([0.4])
     svg.append("g")
-    .attr("transform", `translate(0, ${height})`)
-    .call(d3.axisBottom(x).tickSize(0));
-    
+        .attr("transform", `translate(0, ${innerHeight})`)
+        .call(d3.axisBottom(x).tickSize(0))
+        .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", "rotate(-45)")
+            .style("font-size", "12px");
+
+    // Add Y axis label
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x", 0 - (innerHeight / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Count")
+        .style("font-size", "14px");
 
     // Add Y axis
     const y = d3.scaleLinear()
-    .domain([0,  1.1 * max_y])
-    .range([ height, 0 ]);
+        .domain([0, 1.1 * max_y])
+        .range([ innerHeight, 0 ]);
     svg.append("g")
-    .call(d3.axisLeft(y));
+        .call(d3.axisLeft(y).ticks(10))
+        .selectAll("text")
+            .style("font-size", "12px");
 
-    // Another scale for subgroup position?
+    // Another scale for subgroup position
     const xSubgroup = d3.scaleBand()
-    .domain(subgroups)
-    .range([0, x.bandwidth()])
-    .padding([0.05])
+        .domain(subgroups)
+        .range([0, x.bandwidth()])
+        .padding([0.05])
 
     // color palette = one color per subgroup
     const color = d3.scaleOrdinal()
-    .domain(subgroups)
-    .range(['#e41a1c','#377eb8','#4daf4a'])
+        .domain(subgroups)
+        .range(['#e41a1c','#377eb8','#4daf4a'])
 
-    // Show the bars
+    // Show the bars with animation
     const rects = svg.append("g")
-    .selectAll("g")
-    // Enter in data = loop group per group
-    .data(data)
-    .join("g")
-        .attr("transform", d => `translate(${x(d.group)}, 0)`)
-    .selectAll("rect")
-    .data(function(d) { return subgroups.map(function(key) { return {key: key, value: d[key]}; }); })
-    .join("rect")
-        .attr("x", d => xSubgroup(d.key))
-        .attr("y", d => y(d.value))
-        .attr("width", xSubgroup.bandwidth())
-        .attr("height", d => height - y(d.value))
-        .attr("fill", d => color(d.key));
+        .selectAll("g")
+        .data(data)
+        .join("g")
+            .attr("transform", d => `translate(${x(d.group)}, 0)`)
+        .selectAll("rect")
+        .data(function(d) { return subgroups.map(function(key) { return {key: key, value: d[key]}; }); })
+        .join("rect")
+            .attr("x", d => xSubgroup(d.key))
+            .attr("y", innerHeight) // Start bars from bottom
+            .attr("width", xSubgroup.bandwidth())
+            .attr("height", 0) // Initial height is 0
+            .attr("fill", d => color(d.key));
 
+    // Animate bars growing from bottom to their actual height
     rects
         .transition()
-        .duration(1000) // duration of the animation
-        .delay(200) // delay animation start
-        .attr("cx", (d, i) => d * 50)
-        .attr("cy", (d, i) => 40 + i * 100)
-        .transition() // start another transition after the first one ended
-        .attr("r", 20);
-        
+        .duration(800)
+        .delay((d, i) => i * 50) // Staggered animation
+        .attr("y", d => y(d.value))
+        .attr("height", d => innerHeight - y(d.value));
     });
-
 }
