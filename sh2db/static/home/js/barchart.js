@@ -88,20 +88,20 @@ function barchart(url_mask, width, height){
         .join("g")
             .attr("transform", d => `translate(${x(d.group)}, 0)`)
         .selectAll("rect")
-        .data(function(d) { return subgroups.map(function(key) { return {key: key, value: d[key], group: d.group}; }); })
+        .data(function(d) { return subgroups.map(function(key) { return {key: key, value: d[key], group: d.group, originalColor: color(key)}; }); })
         .join("rect")
             .attr("x", d => xSubgroup(d.key))
             .attr("y", innerHeight) // Start bars from bottom
             .attr("width", xSubgroup.bandwidth())
             .attr("height", 0) // Initial height is 0
-            .attr("fill", d => color(d.key))
+            .attr("fill", d => d.originalColor)
             .attr("class", "bar-rect")
             .on("mouseover", function(event, d) {
-                // Darken the bar on hover with a deep red
+                // Highlight with pure red
                 d3.select(this)
                     .transition()
                     .duration(200)
-                    .attr("fill", "#8B0000");  // Dark red
+                    .attr("fill", "#FF0000");  // Pure red
                 
                 // Show tooltip with just the value
                 tooltip.transition()
@@ -109,14 +109,14 @@ function barchart(url_mask, width, height){
                     .style("opacity", .9);
                 tooltip.html(`${d.value}`)
                     .style("left", (event.pageX) + "px")
-                    .style("top", (event.pageY - 28) + "px");
+                    .style("top", (event.pageY - 10) + "px");
             })
             .on("mouseout", function(d) {
                 // Restore original color
                 d3.select(this)
                     .transition()
                     .duration(200)
-                    .attr("fill", color(d.key));
+                    .attr("fill", d.originalColor);
                 
                 // Hide tooltip
                 tooltip.transition()
