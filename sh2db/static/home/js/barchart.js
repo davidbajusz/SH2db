@@ -97,18 +97,18 @@ function barchart(url_mask, width, height){
             .attr("fill", d => color(d.key))
             .attr("class", "bar-rect")
             .on("mouseover", function(event, d) {
-                // Darken the bar on hover
+                // Darken the bar on hover with a deep red
                 d3.select(this)
                     .transition()
                     .duration(200)
-                    .attr("fill", d3.color(color(d.key)).darker(0.7));
+                    .attr("fill", "#8B0000");  // Dark red
                 
-                // Show tooltip
+                // Show tooltip with just the value
                 tooltip.transition()
                     .duration(200)
                     .style("opacity", .9);
-                tooltip.html(`Group: ${d.group}<br/>Category: ${d.key}<br/>Value: ${d.value}`)
-                    .style("left", (event.pageX + 10) + "px")
+                tooltip.html(`${d.value}`)
+                    .style("left", (event.pageX) + "px")
                     .style("top", (event.pageY - 28) + "px");
             })
             .on("mouseout", function(d) {

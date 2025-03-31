@@ -11,7 +11,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <label for="select_x" class="form-label">X axis:</label>
-            <select name="select_x" id="select_x" class="form-select form-select-lg btn-outline-danger">
+            <select name="select_x" id="select_x" class="form-select form-select-lg">
               <option value="family" selected>Functional category</option>
               <option value="year">Year</option>
               <option value="species">Species</option>
@@ -22,7 +22,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <label for="select_y" class="form-label">Y axis:</label>
-            <select name="select_y" id="select_y" class="form-select form-select-lg btn-outline-danger">
+            <select name="select_y" id="select_y" class="form-select form-select-lg">
               <option value="protein" selected>Proteins</option>
               <option value="structure">PDB entries</option>
               <option value="structuredomain">SH2 domain structures</option>
@@ -48,13 +48,6 @@
 <script src="{% static 'home/js/barchart.js' %}"></script>
 
 <style>
-  /* Hover effect for dropdowns */
-  .form-select.btn-outline-danger:hover {
-    background-color: #f8d7da;
-    border-color: #dc3545;
-    color: #dc3545;
-  }
-
   /* Tooltip styling */
   .tooltip {
     position: absolute;
