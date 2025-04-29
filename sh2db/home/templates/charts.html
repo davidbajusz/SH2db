@@ -4,31 +4,95 @@
 {% block title %}SH2db - Charts{% endblock %}
 
 {% block content %}
+<style>
+  .custom-select {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+    background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+
+  .custom-select:hover {
+    border-color: #0d6efd;
+    box-shadow: 0 4px 8px rgba(13, 110, 253, 0.1);
+  }
+
+  .custom-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+    outline: none;
+  }
+
+  .axis-label {
+    color: #495057;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .control-panel {
+    background: #ffffff;
+  }
+
+  .bar-tooltip {
+    position: absolute;
+    padding: 8px 12px;
+    background: rgba(33, 37, 41, 0.95);
+    color: white;
+    border-radius: 8px;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    pointer-events: none;
+    opacity: 0;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+  }
+</style>
+
 <div class="container">
   <div class="row">
     <div class="col-md-12" id="chartArea">
+      <div class="mb-4 control-panel p-4">
+        <div class="row g-4">
+          <div class="col-md-3">
+            <div class="form-group">
+              <label for="select_x" class="form-label axis-label mb-2">X axis</label>
+              <select name="select_x" id="select_x" class="custom-select w-100">
+                <option value="family" selected>Functional category</option>
+                <option value="year">Year</option>
+                <option value="species">Species</option>
+                <option value="no_sh2">No. of SH2 domains in entry</option>
+              </select>
+            </div>
+          </div>
 
-
-      <label for="select_x">X axis:</label>
-      <select name="select_x" id="select_x">
-        <option value="family" selected>Functional category</option>
-        <option value="year">Year</option>
-        <option value="species">Species</option>
-        <option value="no_sh2">No. of SH2 domains in entry</option>
-      </select>
-
-      <label for="select_y">Y axis:</label>
-      <select name="select_y" id="select_y">
-        <option value="protein" selected>Proteins</option>
-        <option value="structure">PDB entries</option>
-        <option value="structuredomain">SH2 domain structures</option>
-        <option value="publication">Publications</option>
-      </select>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label for="select_y" class="form-label axis-label mb-2">Y axis</label>
+              <select name="select_y" id="select_y" class="custom-select w-100">
+                <option value="protein" selected>Proteins</option>
+                <option value="structure">PDB entries</option>
+                <option value="structuredomain">SH2 domain structures</option>
+                <option value="publication">Publications</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div id="grouped_bars"></div>
 
     </div>
-
   </div>
 </div>
 {% endblock %}
